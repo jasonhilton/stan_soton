@@ -623,29 +623,74 @@ schools_dat <- list(J = 8,
 
 \begin{align*}
 \mu &\sim N(0,5) \\
-\tau &\sim \text{Cauchy}(0, 5)^{+}
-\theta_n &\sim N(\mu,\tau)
+\tau &\sim \text{Cauchy}(0, 5)^{+} \\ 
+\theta_n &\sim N(\mu,\tau) \\
 y_n &\sim N(\theta_n, \sigma_n)
 \end{align*}
+
+```{r, include=F, cache=T}
+
+schools_dat <- list(J = 8, 
+                    y = c(28,  8, -3,  7, -1,  1, 18, 12),
+                    sigma = c(15, 10, 16, 11,  9, 11, 10, 18))
+
+# Example based on https://mc-stan.org/users/documentation/case-studies/divergences_and_bias.html
+
+
+stan_out <- stan(file="stan/eight_schools.stan",
+                 data= schools_dat,
+                 iter=2000,
+                 cores=2,
+                 chains=2)
+
+```
 
 ---
 # Examining Divergences
 
-This is a 'centred parameterisation'. 
+This is a 'centred parameterisation', and in this case it exhibits divergences, indicating the curvature of the posterior differs considerably in different areas of the posterior. 
+
+We can examine a scatter plot of the posterior over two parameters using the code below.
 
 ```{r, eval=F}
 np <- nuts_params(stan_out)
 lp <- log_posterior(stan_out)
-bayesplot::mcmc_nuts_divergence(np, lp)
+
 
 all_pars <- as.array(stan_out)
 
 bayesplot::mcmc_scatter(all_pars, pars = c("theta[1]", "tau"), np=np)
 
-bayesplot::mcmc_scatter(all_pars, pars = c("theta[1]", "tau"), 
-                        transformations=list(tau=log), np=np)
+
 
 ```
+
+
+
+
+
+---
+# Scatter with divergences
+
+Red dots indicate divergent transitions
+
+
+```{r, echo=F, cache=T, fig.height=4}
+np <- nuts_params(stan_out)
+lp <- log_posterior(stan_out)
+
+
+all_pars <- as.array(stan_out)
+
+bayesplot::mcmc_scatter(all_pars, pars = c("theta[1]", "tau"), 
+                        transformations = list(tau=log),
+                        np=np)
+
+
+
+```
+
+
 
 
 ---
@@ -655,17 +700,43 @@ A non-centred parameterisation:
 
 \begin{align*}
 \mu &\sim N(0,5) \\
-\tau &\sim \text{Cauchy}(0, 5)^{+}
-\tilde{\theta_n} &\sim N(0,1)
-\theta_n = \mu + \tau * \tilde{\theta_n}
-y_n &\sim N(\theta_n, \sigma_n)
+\tau &\sim \text{Cauchy}(0, 5)^{+} \\
+\tilde{\theta_n} &\sim N(0,1) \\
+\theta_n &= \mu + \tau * \tilde{\theta_n} \\
+y_n &\sim N(\theta_n, \sigma_n) 
 \end{align*}
 
 
 Fit this parameterisation and examine the differences.
 
---
+---
+
+```{r, echo=F, cache=T, fig.height=4}
+
+
+stan_out <- stan(file="stan/eight_schools_non_centred.stan",
+                 data= schools_dat,
+                 iter=2000,
+                 cores=2,
+                 chains=2)
+
+
+
+np <- nuts_params(stan_out)
+lp <- log_posterior(stan_out)
+
+
+all_pars <- as.array(stan_out)
+
+bayesplot::mcmc_scatter(all_pars, pars = c("theta_tilde[1]", "tau"), 
+                        np=np, transformations = list(tau=log))
+
+```
+
 Changing the geometry of the parameter space makes a big difference to HMC sampling.
+
+
+
 
 ---
 # Other Features

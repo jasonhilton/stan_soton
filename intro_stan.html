@@ -639,29 +639,44 @@ schools_dat &lt;- list(J = 8,
 
 `\begin{align*}
 \mu &amp;\sim N(0,5) \\
-\tau &amp;\sim \text{Cauchy}(0, 5)^{+}
-\theta_n &amp;\sim N(\mu,\tau)
+\tau &amp;\sim \text{Cauchy}(0, 5)^{+} \\ 
+\theta_n &amp;\sim N(\mu,\tau) \\
 y_n &amp;\sim N(\theta_n, \sigma_n)
 \end{align*}`
+
+
 
 ---
 # Examining Divergences
 
-This is a 'centred parameterisation'. 
+This is a 'centred parameterisation', and in this case it exhibits divergences, indicating the curvature of the posterior differs considerably in different areas of the posterior. 
+
+We can examine a scatter plot of the posterior over two parameters using the code below.
 
 
 ```r
 np &lt;- nuts_params(stan_out)
 lp &lt;- log_posterior(stan_out)
-bayesplot::mcmc_nuts_divergence(np, lp)
+
 
 all_pars &lt;- as.array(stan_out)
 
 bayesplot::mcmc_scatter(all_pars, pars = c("theta[1]", "tau"), np=np)
-
-bayesplot::mcmc_scatter(all_pars, pars = c("theta[1]", "tau"), 
-                        transformations=list(tau=log), np=np)
 ```
+
+
+
+
+
+---
+# Scatter with divergences
+
+
+
+
+![](intro_stan_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+
+
 
 
 ---
@@ -671,17 +686,23 @@ A non-centred parameterisation:
 
 `\begin{align*}
 \mu &amp;\sim N(0,5) \\
-\tau &amp;\sim \text{Cauchy}(0, 5)^{+}
-\tilde{\theta_n} &amp;\sim N(0,1)
-\theta_n = \mu + \tau * \tilde{\theta_n}
-y_n &amp;\sim N(\theta_n, \sigma_n)
+\tau &amp;\sim \text{Cauchy}(0, 5)^{+} \\
+\tilde{\theta_n} &amp;\sim N(0,1) \\
+\theta_n &amp;= \mu + \tau * \tilde{\theta_n} \\
+y_n &amp;\sim N(\theta_n, \sigma_n) 
 \end{align*}`
 
 
 Fit this parameterisation and examine the differences.
 
---
+---
+
+![](intro_stan_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+
 Changing the geometry of the parameter space makes a big difference to HMC sampling.
+
+
+
 
 ---
 # Other Features
