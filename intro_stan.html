@@ -4,7 +4,7 @@
     <title>Introduction to Stan</title>
     <meta charset="utf-8" />
     <meta name="author" content="Jason Hilton" />
-    <meta name="date" content="2020-01-14" />
+    <meta name="date" content="2020-01-15" />
     <link href="libs/remark-css/hygge.css" rel="stylesheet" />
     <link href="libs/remark-css/middlebury-fonts.css" rel="stylesheet" />
     <link rel="stylesheet" href="cpc.css" type="text/css" />
@@ -16,7 +16,7 @@ class: center, middle, inverse, title-slide
 # Introduction to Stan
 ### Jason Hilton
 ### University of Southampton
-### 2020-01-14
+### 2020-01-15
 
 ---
 
@@ -671,7 +671,7 @@ bayesplot::mcmc_scatter(all_pars, pars = c("theta[1]", "tau"), np=np)
 ---
 # Scatter with divergences
 
-
+Red dots indicate divergent transitions
 
 
 ![](intro_stan_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
@@ -750,14 +750,6 @@ Hoffman and Gelman (2014) The No-U-Turn sampler: Adaptively setting path lengths
 McElreath (2016) Statistical Rethinking. CRC Press. Boca Raton.
 
 Neal (2011) MCMC using Hamiltonian Dynamics in *Handbook of Monte Carlo Markov Chain.* Brooks, S., Gelman, A. Jones. G.L. and Meng, X-L (eds). CRC Press. [https://www.mcmchandbook.net/HandbookChapter5.pdf](https://www.mcmchandbook.net/HandbookChapter5.pdf). Also on arXiv.
-
----
-# Hamiltonian Monte Carlo and convergence
-
-why does HMC preserve the target distribution
-
-- Hamiltonian dynamics is time reversable, so that the probability of transition from A  -&gt; B is equal to the opposite.
-- Hamiltonian transitions are volume preserving
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

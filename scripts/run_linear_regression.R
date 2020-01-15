@@ -1,8 +1,6 @@
 library(rstan)
 
-args = commandArgs(trailingOnly=TRUE)
 
-model_name <- args[1]
 
 x1 <- seq(-5,5, 0.1)
 x2 <- rnorm(length(x1))
@@ -22,12 +20,21 @@ stan_input_data <- list(
 )
 
 ## running stan command here
-
+stan_out <- stan(file="stan/linear_regression.stan",
+                 data=stan_input_data,
+                 iter=2000,
+                 chains=2,
+                 cores=2,
+                 thin=1)
 ## traceplots
-
+stan_trace(stan_out)
 ## ac plots
-
+stan_ac(stan_out)
 # rhat plots
+stan_rhat(stan_out)
 
-## generating quantities
-
+## posterior predictive checking using generating quantities
+library(bayesplot)
+y_rep <- as.matrix(stan_out, "y_rep")
+y_real <- stan_input_data$y
+ppc_dens_overlay(y_real, y_rep) + theme_bw(base_size = 16)

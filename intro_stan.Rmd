@@ -785,13 +785,6 @@ McElreath (2016) Statistical Rethinking. CRC Press. Boca Raton.
 
 Neal (2011) MCMC using Hamiltonian Dynamics in *Handbook of Monte Carlo Markov Chain.* Brooks, S., Gelman, A. Jones. G.L. and Meng, X-L (eds). CRC Press. [https://www.mcmchandbook.net/HandbookChapter5.pdf](https://www.mcmchandbook.net/HandbookChapter5.pdf). Also on arXiv.
 
----
-# Hamiltonian Monte Carlo and convergence
-
-why does HMC preserve the target distribution
-
-- Hamiltonian dynamics is time reversable, so that the probability of transition from A  -> B is equal to the opposite.
-- Hamiltonian transitions are volume preserving
 
 
 
