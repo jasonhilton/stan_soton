@@ -322,7 +322,7 @@ for(i in 1:N){
 ```
 
 ---
-# Declarations and Variable Types}
+# Declarations and Variable Types
 All variables and constraints must be declared before use.
 
 ```{r, eval=F}
